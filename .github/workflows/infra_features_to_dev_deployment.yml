@@ -3,8 +3,8 @@ name: Deploy to Amazon Services
 on:
   push:
     branches:
-      - 'infra-dev-*'
-      - 'infra-prod-*'   
+      - infra-dev-*
+      - infra-prod-*
                                                
 jobs:
   deploy:
