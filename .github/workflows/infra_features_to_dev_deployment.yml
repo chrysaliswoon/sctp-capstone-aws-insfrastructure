@@ -2,7 +2,7 @@ name: Deploy to Amazon Services
 
 on:
   pull_request:
-    branches: [ "infra-dev-" ]
+    branches: [ "infra-dev" ]
   push:
     branches:
       - infra-dev-*
