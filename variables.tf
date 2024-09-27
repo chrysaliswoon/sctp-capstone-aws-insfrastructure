@@ -16,3 +16,9 @@ variable "lambda_timeout" {
 }
 
 
+variable "lambda_" {
+  type        = number
+  default     = 6
+  description = "execution time in seconds before lambda function timeout"
+}
+
