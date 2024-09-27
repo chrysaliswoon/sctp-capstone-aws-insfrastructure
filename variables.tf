@@ -12,13 +12,7 @@ variable "lambda_mem" {
 variable "lambda_timeout" {
   type        = number
   default     = 6
-  description = "execution time in seconds before lambda function timeout"
+  description = "execution time in seconds before lambda function timeout v2"
 }
 
-
-variable "lambda_" {
-  type        = number
-  default     = 6
-  description = "execution time in seconds before lambda function timeout"
-}
 
