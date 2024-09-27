@@ -1,6 +1,8 @@
 name: Deploy to Amazon Services
 
 on:
+  pull_request:
+    branches: [ "infra-dev-" ]
   push:
     branches:
       - infra-dev-*
@@ -26,7 +28,7 @@ jobs:
     - name: Setup Terraform
       uses: hashicorp/setup-terraform@v2
 
-    - name: Terraform fmt
+    - name: Terraform fmt check
       id: fmt
       run: terraform fmt -check
     
