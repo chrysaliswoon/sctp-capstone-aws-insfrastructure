@@ -7,10 +7,5 @@ terraform {
     region = "ap-southeast-1"              # Terraform State bucket region
 
   }
-  required_providers {
-    archive = {
-      source  = "hashicorp/archive"
-      version = "~> 2.3" # Replace with the desired version or version constraint
-    }
-  }
+
 }
