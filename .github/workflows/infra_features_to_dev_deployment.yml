@@ -6,7 +6,7 @@ on:
   push:
     branches:
       - infra-dev-*
-      - infra-prod-*
+      #- infra-prod-*
                                                
 jobs:
   deploy:
