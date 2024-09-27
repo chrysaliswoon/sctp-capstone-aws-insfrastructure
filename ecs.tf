@@ -1,5 +1,5 @@
 locals {
-  prefix = "ce6-capstone-group3-dev"  #Change
+  prefix = "ce6-capstone-group3-dev" #Change
 }
 data "aws_caller_identity" "current" {}
 
@@ -43,29 +43,29 @@ module "ecs" {
   }
 
 
-    services = {
-        ce6-capstone-group3-svc= { #task def and service name -> #Change
-        cpu    = 512
-        memory = 1024
-        # Container definition(s)
-        container_definitions = {
-            ecs-superset = { #container name
-            essential = true
-            image     = "${data.aws_caller_identity.current.account_id}.dkr.ecr.${data.aws_region.current.name}.amazonaws.com/grp3-superset-${local.prefix}:latest"
-            port_mappings = [
-                {
-                containerPort = 8080
-                protocol      = "tcp"
-                }
-            ]
+  services = {
+    ce6-capstone-group3-svc = { #task def and service name -> #Change
+      cpu    = 512
+      memory = 1024
+      # Container definition(s)
+      container_definitions = {
+        ecs-superset = { #container name
+          essential = true
+          image     = "${data.aws_caller_identity.current.account_id}.dkr.ecr.${data.aws_region.current.name}.amazonaws.com/grp3-superset-${local.prefix}:latest"
+          port_mappings = [
+            {
+              containerPort = 8080
+              protocol      = "tcp"
             }
+          ]
         }
-        assign_public_ip                   = true
-        deployment_minimum_healthy_percent = 100
-        subnet_ids                         = flatten(data.aws_subnets.public.ids)
-        security_group_ids                 = [module.ecs_sg.security_group_id]
-        }
+      }
+      assign_public_ip                   = true
+      deployment_minimum_healthy_percent = 100
+      subnet_ids                         = flatten(data.aws_subnets.public.ids)
+      security_group_ids                 = [module.ecs_sg.security_group_id]
     }
+  }
 }
 
 

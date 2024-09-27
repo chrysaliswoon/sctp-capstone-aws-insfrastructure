@@ -20,7 +20,7 @@ resource "aws_glue_crawler" "example" {
   name          = "ce6-capstone-group3-${var.env}"
   role          = data.aws_iam_role.glue_crawler.arn
   schedule      = "cron(40 14 * * ? *)"
-  
+
   provisioner "local-exec" {
     command = "aws glue start-crawler --name ${self.name}"
   }

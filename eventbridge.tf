@@ -1,7 +1,7 @@
 resource "aws_cloudwatch_event_rule" "lambda_trigger" {
-  name                  = "trigger-lambda-data-process-${var.env}"
-  description           = "Trigger lambda at a scheduled datetime"
-  schedule_expression   = "cron(00 14 * * ? *)"
+  name                = "trigger-lambda-data-process-${var.env}"
+  description         = "Trigger lambda at a scheduled datetime"
+  schedule_expression = "cron(00 14 * * ? *)"
 
 }
 

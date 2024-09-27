@@ -38,7 +38,7 @@ resource "aws_lambda_function" "process_data" {
 
 }
 
-resource aws_lambda_permission "event_bridge" {
+resource "aws_lambda_permission" "event_bridge" {
 
   statement_id  = "AllowExecutionFromCloudWatch"
   action        = "lambda:InvokeFunction"
