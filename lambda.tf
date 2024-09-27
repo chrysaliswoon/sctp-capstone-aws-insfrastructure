@@ -1,16 +1,3 @@
-data "aws_iam_policy_document" "assume_role" {
-  statement {
-    effect = "Allow"
-
-    principals {
-      type        = "Service"
-      identifiers = ["lambda.amazonaws.com"]
-    }
-
-    actions = ["sts:AssumeRole"]
-  }
-}
-
 data "aws_iam_role" "lambda_data_process" {
   name = "ce6-group3-process-data-role-0dm6lrbw"
 }
