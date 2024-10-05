@@ -110,7 +110,7 @@ We welcome contributions! Please follow these steps:
 3. **Make Your Changes**: Develop and test your changes.
 4. **Submit a Pull Request**: Once your changes are tested, submit a pull request with a detailed explanation.
 
-Please refer to our ```CONTRIBUTING.md``` for more details on contributing.
+Please refer to our [CONTRIBUTING.md](CONTRIBUTING.md) for more details on contributing.
 
 ## Licensing and Credits
 
