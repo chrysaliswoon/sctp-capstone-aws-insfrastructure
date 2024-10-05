@@ -100,6 +100,17 @@ To trigger a deployment, simply push your changes to the main branch, and the Gi
 
 ## Contribution Guidelines
 
+We welcome contributions! Please follow these steps:
+
+1. **Fork the Repository**: Create your own fork of the repository.
+2. **Create a Feature Branch**: Create a branch for your feature or bugfix.
+    ```bash
+    git checkout -b feature-branch
+    ```
+3. **Make Your Changes**: Develop and test your changes.
+4. **Submit a Pull Request**: Once your changes are tested, submit a pull request with a detailed explanation.
+
+Please refer to our ```CONTRIBUTING.md``` for more details on contributing.
 
 ## Licensing and Credits
 
