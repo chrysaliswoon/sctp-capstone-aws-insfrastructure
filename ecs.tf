@@ -1,28 +1,5 @@
 locals {
-  prefix = "ce6-capstone-group3-dev" #Change
-}
-data "aws_caller_identity" "current" {}
-
-
-data "aws_region" "current" {}
-
-
-data "aws_vpc" "default" {
-  default = true
-}
-
-
-data "aws_subnets" "public" {
-  filter {
-    name   = "vpc-id"
-    values = [data.aws_vpc.default.id]
-  }
-}
-
-
-resource "aws_ecr_repository" "ecr" {
-  name         = "${local.prefix}-ecr"
-  force_delete = true
+  prefix = "ce6-capstone-group3-${var.env}"  #Change
 }
 
 
@@ -41,17 +18,15 @@ module "ecs" {
       }
     }
   }
-
-
-  services = {
-    ce6-capstone-group3-svc = { #task def and service name -> #Change
+    services = {
+    ce6-capstone-group3-service = { #task def and service name -> #Change d
       cpu    = 512
       memory = 1024
       # Container definition(s)
       container_definitions = {
-        ecs-superset = { #container name
+        grp3-ecs = { #container name
           essential = true
-          image     = "${data.aws_caller_identity.current.account_id}.dkr.ecr.${data.aws_region.current.name}.amazonaws.com/grp3-superset-${local.prefix}:latest"
+          image     = "${data.aws_caller_identity.current.account_id}.dkr.ecr.${data.aws_region.current.name}.amazonaws.com/${local.prefix}-ecr:latest"
           port_mappings = [
             {
               containerPort = 8080
@@ -68,16 +43,13 @@ module "ecs" {
   }
 }
 
-
 module "ecs_sg" {
   source  = "terraform-aws-modules/security-group/aws"
   version = "~> 5.1.0"
 
-
-  name        = "${local.prefix}-superset-sg"
+  name        = "${local.prefix}-ecs-sg"
   description = "Security group for ecs"
   vpc_id      = data.aws_vpc.default.id
-
 
   ingress_cidr_blocks = ["0.0.0.0/0"]
   ingress_rules       = ["http-8080-tcp"]
