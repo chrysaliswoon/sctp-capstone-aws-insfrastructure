@@ -1,6 +1,3 @@
-Here’s a **CONTRIBUTING.md** template tailored for your GitHub repository dedicated to creating AWS infrastructure using Terraform:
-
-```markdown
 # Contributing to the AWS Infrastructure Project
 
 Thank you for your interest in contributing to our AWS Infrastructure project! We appreciate any help from the community and encourage you to follow the guidelines below to ensure a smooth contribution process.
