@@ -2,10 +2,6 @@ data "aws_iam_role" "glue_crawler" {
   name = "AWSGlueServiceRole-ce6-capstone-group3"
 }
 
-data "aws_s3_bucket" "sssw" {
-  bucket = "ce6-group3-sssw"
-}
-
 resource "aws_glue_catalog_database" "sssw" {
   name = "ce6-group3-capstone-${var.env}-db"
 }
@@ -26,7 +22,7 @@ resource "aws_glue_crawler" "example" {
   }
 
   s3_target {
-    path = "s3://${data.aws_s3_bucket.sssw.bucket}/output/"
+    path = "s3://${aws_s3_bucket.bucket.bucket}/output/"
   }
 }
 
