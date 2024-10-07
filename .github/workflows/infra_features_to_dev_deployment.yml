@@ -49,4 +49,4 @@ jobs:
       run: tflint -f compact
 
     - name: Terrform Plan
-      run: "terraform plan -var-file=${{ github.ref_name }}.tfvars"
+      run: "terraform plan -var-file=${{ github.ref_name }}"
