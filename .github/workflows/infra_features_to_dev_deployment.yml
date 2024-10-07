@@ -3,6 +3,9 @@ name: Deploy to Amazon Services
 on:
   pull_request:
     branches: [infra-dev, infra-prod]
+
+  push:
+    branches: [ "main" ]
                            
 jobs:
   deploy:
