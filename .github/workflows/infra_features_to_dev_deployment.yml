@@ -1,14 +1,9 @@
 name: Deploy to Amazon Services
 
 on:
-  workflow_dispatch:
-    branches:
-        - infra-prod
-        - infra-dev
-  # push:
-  #   branches:
-  #     - main
-                                               
+  pull_request:
+    branches: ["main"]
+                           
 jobs:
   deploy:
     name: Deploy
