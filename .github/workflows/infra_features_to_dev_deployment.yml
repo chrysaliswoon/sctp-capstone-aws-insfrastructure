@@ -5,9 +5,6 @@ on:
     branches:
         - infra-prod
         - infra-dev
-  # push:
-  #   branches:
-  #     - main
                                                
 jobs:
   deploy:
