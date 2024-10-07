@@ -1,16 +1,8 @@
 name: Deploy to Amazon Services
 
 on:
-  workflow_dispatch:
-    inputs:
-      tfvars_file:
-        description: 'Select the tfvars file'
-        required: true
-        default: 'infra-dev.tfvars'
-        type: choice
-        options:
-          - infra-dev.tfvars
-          - infra-prod.tfvars
+  pull_request:
+    branches: [ infra-dev, infra-prod ]
                           
 jobs:
   deploy:
@@ -57,4 +49,4 @@ jobs:
       run: tflint -f compact
 
     - name: Terrform Plan
-      run: "terraform plan -var-file=${{ github.ref_name }}.tfvars"
+      run: "terraform plan -var-file=${{ github.ref_name }}"
