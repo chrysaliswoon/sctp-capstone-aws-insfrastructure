@@ -2,10 +2,10 @@ name: Deploy to Amazon Services
 
 on:
   pull_request:
-    branches: [ "main" ]
-  push:
-    branches:
-      - main
+    branches: [ "infra-*" ]
+  # push:
+  #   branches:
+  #     - main
                                                
 jobs:
   deploy:
@@ -52,9 +52,4 @@ jobs:
       run: tflint -f compact
 
     - name: Terrform Plan
-      run: |
-        if [ "${{ github.ref_name }}" == "infra-dev-*" ]; then
-          echo "terraform plan -var-file=dev.tfvars"
-        else
-          echo "terraform plan -var-file=prod.tfvars"
-        fi
+      run: "terraform plan -var-file=${{ github.ref_name }}.tfvars"
