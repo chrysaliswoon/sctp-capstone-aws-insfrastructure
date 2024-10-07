@@ -4,6 +4,8 @@
 
 Provide an overview of the project, including its purpose, goals, and key features. This section helps new team members quickly understand the scope of the project.
 
+For a quick overview of this project which contains links to the other 2 relevant repositories for the Application side clicke [here](https://chrysalis-1.gitbook.io/sctp-capstone-project) to access the Gitbook Documentation.
+
 ## Problem Statement
 
 
