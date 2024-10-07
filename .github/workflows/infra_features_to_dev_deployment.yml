@@ -2,16 +2,15 @@ name: Deploy to Amazon Services
 
 on:
   workflow_dispatch:
-    branches: [ "main" ]
-        inputs:
-          tfvars_file:
-            description: 'Select the tfvars file'
-            required: true
-            default: 'infra-dev.tfvars'
-            type: choice
-            options:
-              - infra-dev.tfvars
-              - infra-prod.tfvars
+    inputs:
+      tfvars_file:
+        description: 'Select the tfvars file'
+        required: true
+        default: 'infra-dev.tfvars'
+        type: choice
+        options:
+          - infra-dev.tfvars
+          - infra-prod.tfvars
                           
 jobs:
   deploy:
