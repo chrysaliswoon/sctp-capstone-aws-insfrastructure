@@ -2,8 +2,8 @@ name: Deploy to Amazon Services
 
 on:
   pull_request:
-    branches: [ infra-dev, infra-prod ]
-                          
+    branches: [infra-dev, infra-prod]
+                           
 jobs:
   deploy:
     name: Deploy
@@ -29,7 +29,7 @@ jobs:
       run: terraform fmt -check
     
     - name: Terraform Init
-      run: terraform init
+      run: terraform init --upgrade
 
     - name: Terraform Validate
       id: validate
@@ -43,7 +43,7 @@ jobs:
       run: tflint --version
 
     - name: Init TFLint
-      run: tflint --init
+      run: tflint --init 
 
     - name: Run TFLint
       run: tflint -f compact
