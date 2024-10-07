@@ -2,7 +2,7 @@ name: Deploy to Amazon Services
 
 on:
   pull_request:
-    branches: ["main"]
+    branches: [infra-dev, infra-prod]
                            
 jobs:
   deploy:
@@ -43,7 +43,7 @@ jobs:
       run: tflint --version
 
     - name: Init TFLint
-      run: tflint --init
+      run: tflint --init 
 
     - name: Run TFLint
       run: tflint -f compact
