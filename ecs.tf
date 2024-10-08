@@ -1,3 +1,6 @@
+data "aws_caller_identity" "current" {}
+data "aws_region" "current" {}
+
 locals {
   prefix = "ce6-capstone-group3-${var.env}" #Change
 }
@@ -37,7 +40,7 @@ module "ecs" {
       }
       assign_public_ip                   = true
       deployment_minimum_healthy_percent = 100
-      subnet_ids                         = flatten(data.aws_subnets.public.ids)
+      subnet_ids                         = aws_subnet.public_subnets[*].id
       security_group_ids                 = [module.ecs_sg.security_group_id]
     }
   }
