@@ -1,0 +1,67 @@
+# .github/workflows/pre-push-check.yml
+name: Pre-Push Check & Create Pull Request
+
+on:
+    push:
+      branches: 
+        - "main" 
+
+permissions:
+    contents: write
+    pull-requests: write  # Grant write access to contents
+
+jobs:
+  pre_push_checks:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+
+    - name: Configure AWS credentials
+      uses: aws-actions/configure-aws-credentials@v1
+      with:
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws-region: ${{ secrets.AWS_REGION }}
+
+    - name: Setup Terraform
+      uses: hashicorp/setup-terraform@v2
+
+    - name: Terraform fmt
+      run: terraform fmt --recursive
+
+    - name: Terraform Init
+      run: terraform init
+
+    - name: Terraform Validate
+      run: terraform validate
+
+    # - name: Init TFLint
+    #   run: tflint --init 
+
+    - name: Create a temporary branch
+      run: |
+        # Create and checkout the new branch
+        git checkout -b temp-branch-${{ github.run_id }}
+
+        # Push the new branch to the remote repository
+        git push origin temp-branch-${{ github.run_id }}
+    - name: List branches
+      run: git branch -a  # Check if the temporary branch exists
+    
+    - name: Create Pull Request
+      id: cpr
+      uses: peter-evans/create-pull-request@v7
+      with:
+        token: ${{ secrets.GITHUB_TOKEN }} # Providing the GITHUB_TOKEN
+        commit-message: Check Terraform & AWS Setup 
+        base: main
+        branch: temp-branch-${{ github.run_id }}  # Use the temporary branch
+        title: 'Automated PR: Pre-Push Checks Passed'
+        body: 'Pre-push checks have passed. Requesting review.'
+        reviewers: |
+          jeffcxl
+          khchung1
+          kristine-lim
+          chrysaliswoon
