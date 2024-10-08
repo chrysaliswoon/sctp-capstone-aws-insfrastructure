@@ -1,5 +1,12 @@
+data "aws_caller_identity" "current" {}
+data "aws_region" "current" {}
+
 locals {
   prefix = "ce6-capstone-group3-${var.env}" #Change
+}
+
+locals {
+  count = 2
 }
 
 
@@ -37,7 +44,7 @@ module "ecs" {
       }
       assign_public_ip                   = true
       deployment_minimum_healthy_percent = 100
-      subnet_ids                         = flatten(data.aws_subnets.public.ids)
+      subnet_ids                         = aws_subnet.public_subnets[*].id
       security_group_ids                 = [module.ecs_sg.security_group_id]
     }
   }
@@ -49,7 +56,8 @@ module "ecs_sg" {
 
   name        = "${local.prefix}-ecs-sg"
   description = "Security group for ecs"
-  vpc_id      = data.aws_vpc.default.id
+  vpc_id      = aws_vpc.main.id
+
   ingress_cidr_blocks = ["0.0.0.0/0"]
   ingress_rules       = ["http-8080-tcp"]
   egress_rules        = ["all-all"]
