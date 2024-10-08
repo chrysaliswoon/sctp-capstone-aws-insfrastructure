@@ -32,8 +32,8 @@ jobs:
     - name: Terraform Validate
       run: terraform validate
 
-    - name: Init TFLint
-      run: tflint --init 
+    # - name: Init TFLint
+    #   run: tflint --init 
 
     - name: Create Pull Request
       uses: peter-evans/create-pull-request@v5
