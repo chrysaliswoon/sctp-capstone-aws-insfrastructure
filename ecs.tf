@@ -1,5 +1,5 @@
 locals {
-  prefix = "ce6-capstone-group3-${var.env}"  #Change
+  prefix = "ce6-capstone-group3-${var.env}" #Change
 }
 
 
@@ -18,7 +18,7 @@ module "ecs" {
       }
     }
   }
-    services = {
+  services = {
     ce6-capstone-group3-service = { #task def and service name -> #Change d
       cpu    = 512
       memory = 1024
