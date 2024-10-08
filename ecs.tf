@@ -47,9 +47,9 @@ module "ecs_sg" {
   source  = "terraform-aws-modules/security-group/aws"
   version = "~> 5.1.0"
 
-  name        = "${local.prefix}-ecs-sg"
-  description = "Security group for ecs"
-  vpc_id      = data.aws_vpc.default.id
+  name                = "${local.prefix}-ecs-sg"
+  description         = "Security group for ecs"
+  vpc_id              = data.aws_vpc.default.id
   ingress_cidr_blocks = ["0.0.0.0/0"]
   ingress_rules       = ["http-8080-tcp"]
   egress_rules        = ["all-all"]
