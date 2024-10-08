@@ -51,7 +51,7 @@ jobs:
       with:
         token: ${{ secrets.GITHUB_TOKEN }} # Providing the GITHUB_TOKEN
         base: main
-        head: temp-branch-${{ github.run_id }}  # Use the temporary branch
+        branch: temp-branch-${{ github.run_id }}  # Use the temporary branch
         title: 'Automated PR: Pre-Push Checks Passed'
         body: 'Pre-push checks have passed. Requesting review.'
         reviewers: |
