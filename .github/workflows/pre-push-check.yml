@@ -46,7 +46,7 @@ jobs:
     - name: Create Pull Request
       uses: peter-evans/create-pull-request@v5
       with:
-        token: ${{ secrets.SECRET_TOKEN }}  # Providing the GITHUB_TOKEN
+        token: ${{ secrets.GITHUB_TOKEN }} # Providing the GITHUB_TOKEN
         base: main
         head: temp-branch-${{ github.run_id }}  # Use the temporary branch
         title: 'Automated PR: Pre-Push Checks Passed'
