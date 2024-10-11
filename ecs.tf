@@ -5,7 +5,6 @@ locals {
   prefix = "ce6-capstone-group3-${var.env}" #Change
 }
 
-
 module "ecs" {
   source  = "terraform-aws-modules/ecs/aws"
   version = "~> 5.9.0"
@@ -22,9 +21,9 @@ module "ecs" {
     }
   }
   services = {
-    ce6-capstone-group3-service = { #task def and service name -> #Change d
-      cpu    = 512
-      memory = 1024
+    ce6-capstone-group3-service = { #task def and service name -> #Change
+      cpu    = var.ecs_cpu
+      memory = var.ecs_mem
       # Container definition(s)
       container_definitions = {
         grp3-ecs = { #container name
@@ -32,7 +31,7 @@ module "ecs" {
           image     = "${data.aws_caller_identity.current.account_id}.dkr.ecr.${data.aws_region.current.name}.amazonaws.com/${local.prefix}-ecr:latest"
           port_mappings = [
             {
-              containerPort = 8080
+              containerPort = 8088
               protocol      = "tcp"
             }
           ]
@@ -52,8 +51,8 @@ module "ecs_sg" {
 
   name                = "${local.prefix}-ecs-sg"
   description         = "Security group for ecs"
-  vpc_id              = data.aws_vpc.default.id
+  vpc_id              = aws_vpc.main.id
   ingress_cidr_blocks = ["0.0.0.0/0"]
-  ingress_rules       = ["http-8080-tcp"]
+  ingress_rules       = ["http-8088-tcp"]
   egress_rules        = ["all-all"]
 }

@@ -15,6 +15,19 @@ variable "lambda_timeout" {
   description = "execution time in seconds before lambda function timeout v2"
 }
 
+variable "ecs_cpu" {
+  type        = number
+  default     = 512
+  description = "ecs computation power"
+}
+
+variable "ecs_mem" {
+  type        = number
+  default     = 512
+  description = "ecs memory power"
+}
+
+
 
 
 variable "vpc_name" {
