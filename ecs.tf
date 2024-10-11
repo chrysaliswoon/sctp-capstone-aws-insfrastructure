@@ -1,6 +1,3 @@
-data "aws_caller_identity" "current" {}
-data "aws_region" "current" {}
-
 locals {
   prefix = "ce6-capstone-group3-${var.env}" #Change
 }
