@@ -1,8 +1,10 @@
-# [Insert Title]
+# CloudScale: Building Scalable AWS Infrastructure with Serverless Applications and Data Visualization
 
 ## Project Overview
 
-Provide an overview of the project, including its purpose, goals, and key features. This section helps new team members quickly understand the scope of the project.
+This capstone project is designed to demonstrate the use of AWS infrastructure for managing scalable cloud environments, a serverless Lambda-based application, and Apache Superset for data visualization. 
+
+The goal is to provide a solution that integrates these components to offer efficient, scalable, and user-friendly data management and visualization.
 
 For a quick overview of this project which contains links to the other 2 relevant repositories for the Application side clicke [here](https://chrysalis-1.gitbook.io/sctp-capstone-project) to access the Gitbook Documentation.
 
