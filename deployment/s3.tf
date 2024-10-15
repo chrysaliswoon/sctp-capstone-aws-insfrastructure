@@ -49,6 +49,9 @@ resource "aws_s3_bucket_replication_configuration" "replication_config" {
   rule {
     id     = "replicate-all-objects"
     status = "Enabled"
+    delete_marker_replication {
+      status = "Enabled"
+    }
 
     # Optional: Replicate only objects with a specific prefix
     filter {
