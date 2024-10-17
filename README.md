@@ -2,7 +2,7 @@
 
 ## Project Overview
 
-This capstone project is designed to demonstrate the use of AWS infrastructure for managing scalable cloud environments, a serverless Lambda-based application, and Apache Superset for data visualization. 
+This capstone project is designed to demonstrate the use of AWS infrastructure for managing scalable cloud environments, a serverless application, and Apache Superset for data visualization. 
 
 The goal is to provide a solution that integrates these components to offer efficient, scalable, and user-friendly data management and visualization.
 
@@ -25,7 +25,7 @@ To automate and optimize the data analysis workflow, we propose the following so
    Glue Crawler will automate the extraction of structured and unstructured data from S3. It will catalog the data, enabling easy querying and analysis without manual intervention, making the data extraction process seamless and efficient.
 
 3. **Amazon ECS for Apache Superset**: 
-   The containerized Apache Superset application will run on Amazon ECS, automating the generation of charts, tables, and computed indicators from the processed data. This will enable users to visualize data and analyze key metrics in a scalable and efficient environment, reducing the need for manual chart creation.
+   The containerized Apache Superset application will run on Amazon ECS. This will enable users to visualize data and analyze key metrics in a scalable and efficient environment, reducing the need for manual chart creation.
 
 This solution will streamline the entire workflow, from data ingestion to visualization, enhancing efficiency, accuracy, and scalability.
 
@@ -47,8 +47,8 @@ This solution will streamline the entire workflow, from data ingestion to visual
 ```bash
 .
 ├── .github/workflows               # CI/CD workflows for automated testing and deployment
-├── deployment/                     # Deployment scripts and infrastructure configuration
-├── vpc/                            # VPC (Virtual Private Cloud) configuration and related Terraform scripts
+├── deployment/                     # Deployment of scripts and infrastructure configuration
+├── vpc/                            # Deployment of VPC (Virtual Private Cloud) configuration 
 ├── .gitignore                      # Specifies files to ignore in version control
 ├── .terraform.lock.hcl             # Terraform lock file to maintain provider versions
 └── README.md                       # Project documentation, including setup instructions
@@ -171,7 +171,7 @@ To trigger a deployment, simply push your changes to a branch and submit a pull 
    - Test Docker containers locally before deploying to ECS:
      ```bash
      docker build -t app .
-     docker run -p 8080:8080 app
+     docker run -p 8088:8088 app
      ```
 
 #### 4. **AWS Glue Testing**
@@ -190,73 +190,45 @@ To trigger a deployment, simply push your changes to a branch and submit a pull 
 
 For this project, we have set-up github actions workflow to automate the deployment side of things, and here was how we did it:
 
-#### **1. Set Up GitHub Actions Workflow**
+#### **1. Branching Strategy**
 
-- In the project repository, created the following file:
+*This section outlines the branching strategy used for patching Superset image and Lambda application code.*
+<br>The branching strategy is the same for both resources.
 
-```bash
-.github/workflows/infra_features_to_dev_deployment.yml
-```
+Environments
+ <br>We deploy to two environments:
 
-- Add the deployment workflow:
+* **dev:**  Used for testing and development.
+* **main:**  The live production environment.
 
-```yaml
-name: Deploy to Amazon Services
+Branches
+* **`dev` branch:**
+    * All development work for the dev environment is done on this branch.
+    * Manual trigger is requred for GitHub Actions workflow to deploy the changes to the AWS Dev environment.
 
-on:
-  # pull_request:
-  #   branches: [infra-dev, infra-prod]
+* **`main` branch:**
+    * Represents the production-ready code.
+    * To deploy to the Prod environment, changes must be merged into the `main` from `dev`.
+    * A pull request to `main` requires a code review and approval before it can be merged.
+    * Merging to `main` automatically triggers a GitHub Actions workflow that requires manual approval to deploy the changes to the AWS Prod environment.
+<br>
+<br>
 
-  push:
-    branches: [ "main" ]
-                           
-jobs:
-  deploy:
-    name: Deploy
-    runs-on: ubuntu-latest
-    environment: ${{ github.ref_name }}
+*This section outlines the branching strategy for managing our Terraform code and tfvars files for deploying infrastructure to development and production environments on AWS.*
 
-    steps:
-    - name: Checkout
-      uses: actions/checkout@v3
+- We will use a separate branch for each environment: *dev* and *prod*. This provides clear separation and reduces the risk of accidental deployments to the wrong environment.
 
-    - name: Configure AWS credentials
-      uses: aws-actions/configure-aws-credentials@v1
-      with:
-        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        aws-region: ap-southeast-1
-        
-    - name: Setup Terraform
-      uses: hashicorp/setup-terraform@v2
+- *dev* branch:  
+Contains the dev.tfvars file with settings for the development environment.
+Example settings: smaller cpu and memory size.
+All development and feature work starts in feature branches branched off of
+*dev*
 
-    - name: Terraform fmt check
-      id: fmt
-      run: terraform fmt -check
-    
-    - name: Terraform Init
-      run: terraform init --upgrade
-
-    - name: Terraform Validate
-      id: validate
-      run: terraform validate
-
-    - uses: terraform-linters/setup-tflint@v3
-      with:
-        tflint_version: latest
-        
-    - name: Show version
-      run: tflint --version
-
-    - name: Init TFLint
-      run: tflint --init 
-
-    - name: Run TFLint
-      run: tflint -f compact
-
-    - name: Terrform Plan
-      run: "terraform plan -var-file=${{ github.ref_name }}"
-```
+- *prod* branch:  
+Contains the dev.tfvars file with settings for the production environment.
+Example settings: higher cpu and memory size.
+All Production and feature work starts in feature branches branched off of
+*prod*
 
 ---
 
