@@ -1,4 +1,4 @@
-# CloudScale: Building Scalable AWS Infrastructure with Serverless Applications and Data Visualization
+# CLOUDSCALE: AUTOMATED REPORT GENERATION USING AWS CLOUD SERVICES
 
 ## Project Overview
 
@@ -10,9 +10,24 @@ For a quick overview of this project which contains links to the other 2 relevan
 
 ## Problem Statement
 
+The current process of data analysis involves several manual tasks, including data extraction, computing indicators, creating charts and tables, and managing various file types. 
 
+These steps are time-consuming, error-prone, and inefficient, leading to delays in decision-making and potential inconsistencies in the final output. Automating these processes could significantly enhance productivity, reduce human errors, and streamline the workflow for faster and more accurate data-driven insights.
 
-## Solution
+## Proposed Solution:
+
+To automate and optimize the data analysis workflow, we propose the following solution:
+
+1. **S3 & Lambda for Storage and File Management**: 
+   AWS S3 will serve as the centralized storage for all data files, supporting various file types. Lambda functions will automate file uploads, format conversions, and manage triggers for further processing, reducing manual file handling.
+
+2. **AWS Glue Crawler for Data Extraction**: 
+   Glue Crawler will automate the extraction of structured and unstructured data from S3. It will catalog the data, enabling easy querying and analysis without manual intervention, making the data extraction process seamless and efficient.
+
+3. **Amazon ECS for Apache Superset**: 
+   The containerized Apache Superset application will run on Amazon ECS, automating the generation of charts, tables, and computed indicators from the processed data. This will enable users to visualize data and analyze key metrics in a scalable and efficient environment, reducing the need for manual chart creation.
+
+This solution will streamline the entire workflow, from data ingestion to visualization, enhancing efficiency, accuracy, and scalability.
 
 ## Table of Contents
 - [Project Overview](#project-overview)
