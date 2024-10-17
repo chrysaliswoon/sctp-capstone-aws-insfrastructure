@@ -46,11 +46,12 @@ This solution will streamline the entire workflow, from data ingestion to visual
 
 ```bash
 .
-├── src/               # Source code files
-├── tests/             # Automated tests
-├── docs/              # Project documentation
-├── docker/            # Docker files
-└── README.md          # Project documentation
+├── .github/workflows               # CI/CD workflows for automated testing and deployment
+├── deployment/                     # Deployment scripts and infrastructure configuration
+├── vpc/                            # VPC (Virtual Private Cloud) configuration and related Terraform scripts
+├── .gitignore                      # Specifies files to ignore in version control
+├── .terraform.lock.hcl             # Terraform lock file to maintain provider versions
+└── README.md                       # Project documentation, including setup instructions
 
 ```
 
@@ -58,8 +59,48 @@ This solution will streamline the entire workflow, from data ingestion to visual
 
 Here are the primary dependencies used in this project:
 
-- **Node.js**: Version `v14.x.x` or higher is required.
-- **Docker**: Used for containerization and deployment.
+### **1. Terraform**
+**Installation:**
+- Download Terraform from the official site: [Terraform Downloads](https://www.terraform.io/downloads).
+- Unzip the package and add it to your system's PATH.
+
+**Verify Installation:**
+```bash
+terraform -v
+```
+
+### **2. AWS CLI**
+**Installation:**
+- Install the AWS CLI: [AWS CLI Installation Guide](https://docs.aws.amazon.com/cli/latest/userguide/install-cliv2.html).
+
+**Configure CLI:**
+```bash
+aws configure
+```
+
+### **3. Docker**
+**Installation:**
+- Install Docker from [Docker’s website](https://www.docker.com/products/docker-desktop).
+- Follow platform-specific installation instructions.
+
+**Verify Installation:**
+```bash
+docker --version
+```
+
+### **4. Python (for Lambda)**
+**Installation:**
+- Download and install Python from [Python.org](https://www.python.org/downloads/).
+
+**Verify Installation:**
+```bash
+python --version
+```
+
+### **5. AWS Glue**
+- Glue setup and configuration happen within the AWS Console. Ensure you have the correct permissions to create and manage Glue crawlers.
+
+Make sure you’ve installed all dependencies to ensure smooth functioning of the project.
 
 A full list of dependencies can be found in the `package.json` file.
 
@@ -69,53 +110,245 @@ To set up the development environment for managing AWS infrastructure using Terr
 
 1. **Clone the Repository:**
    ```bash
-   git clone git@github.com:chrysaliswoon/sctp-capstone-aws-insfrastructure.git
+   git clone https://github.com/chrysaliswoon/sctp-capstone-aws-insfrastructure.git
    cd sctp-capstone-aws-insfrastructure
    ```
 
 2. **Install Terraform:**
-You need to install Terraform to manage your AWS infrastructure. You can download it from Terraform's official website or use a package manager:
+   Install Terraform as mentioned in the [primary dependencies](https://www.terraform.io/downloads).
 
-    - **For macOS:**
+3. **Install AWS CLI:**
+   Follow the AWS CLI setup instructions from the [official documentation](https://docs.aws.amazon.com/cli/latest/userguide/install-cliv2.html).
 
+4. **Configure AWS CLI:**
+   Set up your AWS credentials:
    ```bash
-    brew install terraform
+   aws configure
    ```
 
-   - **For Windows**: Download the binary from the website and add it to your system's PATH.
-
-    Check the installation:
-
-    ```bash
-    terraform --version
-    ```
-
-
-3. Set Up AWS CLI
-
-To interact with AWS services, you'll need to install and configure the AWS Command Line Interface (CLI). You can download it from AWS CLI official documentation.
-
-    - **For macOS:**
-
+5. **Set Up Docker:**
+   Install Docker and verify the installation by running:
    ```bash
-    brew install awscli
+   docker --version
    ```
 
-   - **For Windows**: Download the installer and follow the installation guide on AWS's website.
+6. **Set Up Python (Optional for Lambda Functions):**
+   If you're using Python for Lambda:
+   ```bash
+   python --version
+   pip install -r requirements.txt  # if there's a requirements file
+   ```
+
+7. **Terraform Initialization:**
+   Run Terraform commands to initialize your project:
+   ```bash
+   terraform init
+   terraform apply
+   ```
+
+8. **Test Deployment:**
+   Ensure the deployment works by checking AWS resources (S3, ECS, Glue) and reviewing logs.
+
+Your environment should now be set up for development and deployment.
 
 This repository uses GitHub Actions for automating deployments to AWS. The AWS credentials and environment variables are securely stored in GitHub Secrets and are used during the CI/CD pipeline.
 
-To trigger a deployment, simply push your changes to the main branch, and the GitHub Actions workflow will automatically apply the Terraform changes. You can monitor the pipeline in the Actions tab of the GitHub repository.
+To trigger a deployment, simply push your changes to a branch and submit a pull request with a detailed explanation, and the GitHub Actions workflow will automatically apply the Terraform changes. You can monitor the pipeline in the Actions tab of the GitHub repository.
 
 
 ## Testing and Debugging
 
+#### 1. **Unit Testing (Terraform)**
+   - Use `terraform plan` to preview changes and verify infrastructure configuration.
+   - Validate Terraform scripts with:
+     ```bash
+     terraform validate
+     ```
+   - Use tools like [Terratest](https://terratest.gruntwork.io/) for automated tests.
+
+#### 2. **Testing AWS Lambda**
+   - Test Lambda functions locally with [AWS SAM CLI](https://aws.amazon.com/serverless/sam/):
+     ```bash
+     sam local invoke "FunctionName"
+     ```
+   - Debug errors using CloudWatch logs.
+
+#### 3. **Docker Testing (ECS)**
+   - Test Docker containers locally before deploying to ECS:
+     ```bash
+     docker build -t app .
+     docker run -p 8080:8080 app
+     ```
+
+#### 4. **AWS Glue Testing**
+   - Run Glue crawlers in development mode and check results in the AWS Glue Console.
+
+#### 5. **Debugging**
+   - **Terraform Debugging**: Use `TF_LOG=DEBUG` to enable detailed logs.
+   - **AWS CLI**: Check logs in CloudWatch for Lambda, ECS, and Glue errors.
+   - Use AWS X-Ray for tracing and troubleshooting performance issues.
+
+#### 6. **General Tips**
+   - Validate AWS IAM permissions to ensure roles have correct access.
+   - Use `aws cli` commands to inspect resources and troubleshoot any misconfigurations.
 
 ## Deployment Guide
 
+For this project, we have set-up github actions workflow to automate the deployment side of things, and here was how we did it:
 
-## Troubleshooting
+#### **1. Set Up GitHub Actions Workflow**
 
+- In the project repository, created the following file:
+
+```bash
+.github/workflows/infra_features_to_dev_deployment.yml
+```
+
+- Add the deployment workflow:
+
+```yaml
+name: Deploy to Amazon Services
+
+on:
+  # pull_request:
+  #   branches: [infra-dev, infra-prod]
+
+  push:
+    branches: [ "main" ]
+                           
+jobs:
+  deploy:
+    name: Deploy
+    runs-on: ubuntu-latest
+    environment: ${{ github.ref_name }}
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v3
+
+    - name: Configure AWS credentials
+      uses: aws-actions/configure-aws-credentials@v1
+      with:
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws-region: ap-southeast-1
+        
+    - name: Setup Terraform
+      uses: hashicorp/setup-terraform@v2
+
+    - name: Terraform fmt check
+      id: fmt
+      run: terraform fmt -check
+    
+    - name: Terraform Init
+      run: terraform init --upgrade
+
+    - name: Terraform Validate
+      id: validate
+      run: terraform validate
+
+    - uses: terraform-linters/setup-tflint@v3
+      with:
+        tflint_version: latest
+        
+    - name: Show version
+      run: tflint --version
+
+    - name: Init TFLint
+      run: tflint --init 
+
+    - name: Run TFLint
+      run: tflint -f compact
+
+    - name: Terrform Plan
+      run: "terraform plan -var-file=${{ github.ref_name }}"
+```
+
+---
+
+#### **2. Store AWS Credentials in GitHub Secrets**
+
+- In the repository, under **Settings** > **Secrets and Variables** > **Actions**.
+- Added the following secrets:
+  - `AWS_ACCESS_KEY_ID`
+  - `AWS_SECRET_ACCESS_KEY`
+
+---
+
+#### **3. Testing**
+
+- GitHub Actions runs tests and Terraform validation automatically on every push.
+- Review deployment logs in the Actions tab on GitHub to ensure the deployment is successful.
+
+---
+
+This approach automates the deployment, ensuring consistency and reducing manual intervention.
+
+### Detailed Troubleshooting for GitHub Actions & AWS Deployment
+
+---
+
+#### **1. GitHub Actions Fails to Trigger**
+- **Ensure the workflow file is in the `.github/workflows/` directory**.
+- Verify correct syntax and branch triggers in the `.yml` file.
+- Use `push` events on the correct branch (e.g., `main`).
+
+#### **2. Terraform Errors in GitHub Actions**
+- **Issue: `terraform init` fails**:
+  - Ensure correct versions of Terraform in `setup-terraform`.
+  - Check AWS permissions.
+  
+- **Issue: `terraform apply` fails**:
+  - Check for incorrect resource configuration.
+  - Use `terraform plan` to debug.
+
+#### **3. AWS Credentials Issues**
+- **Problem: Failed AWS Authentication**:
+  - Ensure `AWS_ACCESS_KEY_ID` and `AWS_SECRET_ACCESS_KEY` are stored correctly in GitHub Secrets.
+  - Check IAM roles for adequate permissions (e.g., S3, ECS, Lambda).
+
+#### **4. Docker Build Fails**
+- **Issue: Docker image build fails**:
+  - Review Dockerfile for syntax errors.
+  - Make sure required environment variables are passed during the build process.
+
+- **Issue: Docker push to ECR fails**:
+  - Ensure `aws_account_id`, `region`, and repository names are correctly set.
+  - Check that your ECR repository exists and permissions are configured correctly.
+
+#### **5. Lambda Function Issues**
+- **Problem: Lambda function deployment fails**:
+  - Verify that the Lambda package (zip file) includes all dependencies.
+  - Review logs in CloudWatch to identify function errors.
+
+- **Issue: Missing Permissions**:
+  - Ensure the IAM role associated with Lambda has permissions to access resources (e.g., S3, ECS).
+
+---
+
+#### **6. ECS Tasks Not Starting**
+- **Problem: ECS Task Stuck in `PENDING` State**:
+  - Check that your Docker image was successfully pushed to ECR.
+  - Review ECS Task definitions for correct image URI and CPU/memory settings.
+
+- **Debugging ECS**:
+  - Use the ECS Console to view task details and logs.
+  - Ensure the container is not running out of memory or CPU.
+
+---
+
+#### **7. Terraform State Locking Errors**
+- **Problem: `terraform apply` shows a state lock error**:
+  - Use `terraform force-unlock <lock-id>` to manually unlock if another process has locked it.
+
+#### **8. Common GitHub Actions Debugging Techniques**
+- Use `actions/checkout@v2` to ensure code is correctly pulled.
+- Add `set -e` to fail the workflow on the first error in bash scripts.
+- Use `echo` statements in workflows for debugging output.
+
+---
+
+By following these detailed troubleshooting steps, you should be able to resolve common issues encountered during deployment with GitHub Actions and AWS infrastructure.
 
 ## Contribution Guidelines
 
@@ -129,12 +362,13 @@ We welcome contributions! Please follow these steps:
 3. **Make Your Changes**: Develop and test your changes.
 4. **Submit a Pull Request**: Once your changes are tested, submit a pull request with a detailed explanation.
 
-Please refer to our [CONTRIBUTING.md](CONTRIBUTING.md) for more details on contributing.
-
 ## Licensing and Credits
 
-**Author/Team:** List the main contributors or team members.
-**Third-Party Tools:** Mention any external libraries or tools used in the project.
+**Author/Team:** 
+- Kok Hui
+- Kristine
+- Jeff
+- Chrysalis
 
 
 ## Additional Resources
