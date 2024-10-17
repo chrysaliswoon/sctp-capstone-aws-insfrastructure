@@ -120,33 +120,27 @@ To set up the development environment for managing AWS infrastructure using Terr
 3. **Install AWS CLI:**
    Follow the AWS CLI setup instructions from the [official documentation](https://docs.aws.amazon.com/cli/latest/userguide/install-cliv2.html).
 
-4. **Configure AWS CLI:**
-   Set up your AWS credentials:
-   ```bash
-   aws configure
-   ```
-
-5. **Set Up Docker:**
+4. **Set Up Docker:**
    Install Docker and verify the installation by running:
    ```bash
    docker --version
    ```
 
-6. **Set Up Python (Optional for Lambda Functions):**
+5. **Set Up Python (Optional for Lambda Functions):**
    If you're using Python for Lambda:
    ```bash
    python --version
    pip install -r requirements.txt  # if there's a requirements file
    ```
 
-7. **Terraform Initialization:**
+6. **Terraform Initialization:**
    Run Terraform commands to initialize your project:
    ```bash
    terraform init
    terraform apply
    ```
 
-8. **Test Deployment:**
+7. **Test Deployment:**
    Ensure the deployment works by checking AWS resources (S3, ECS, Glue) and reviewing logs.
 
 Your environment should now be set up for development and deployment.
