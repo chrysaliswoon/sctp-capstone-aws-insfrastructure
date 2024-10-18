@@ -10,6 +10,14 @@ jobs:
     environment: ${{ github.ref_name }}
 
     steps:
+
+    - name: Extract first element of branch name
+      id: first-element
+      run: |
+          branch_name="${{ github.ref_name }}"
+          first_element=$(echo "$branch_name" | cut -d '-' -f 1)
+          echo "::set-output name=first_element::$first_element"
+
     - name: Checkout
       uses: actions/checkout@v3
 
@@ -30,6 +38,9 @@ jobs:
     - name: Terraform Init
       run: terraform init --upgrade
 
+    - name: Terraform Workspace Select
+      run: "terraform workspace select ${{ steps.first-element.outputs.first_element }}"
+
     - name: Terraform Validate
       id: validate
       run: terraform validate
@@ -46,14 +57,6 @@ jobs:
 
     - name: Run TFLint
       run: tflint -f compact
-
-    - name: Extract first element of branch name
-      id: first-element
-      run: |
-        run: |
-          branch_name="${{ github.ref_name }}"
-          first_element=$(echo "$branch_name" | cut -d '-' -f 1)
-          echo "::set-output name=first_element::$first_element"
 
     - name: Terrform Plan
       run: "terraform plan -var-file=tfvars/${{ steps.first-element.outputs.first_element }}.tfvars"

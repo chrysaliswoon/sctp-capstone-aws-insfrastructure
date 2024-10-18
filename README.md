@@ -219,16 +219,20 @@ Branches
 - We will use a separate branch for each environment: *dev* and *prod*. This provides clear separation and reduces the risk of accidental deployments to the wrong environment.
 
 - *dev* branch:  
-Contains the dev.tfvars file with settings for the development environment.
-Example settings: smaller cpu and memory size.
-All development and feature work starts in feature branches branched off of
-*dev*
+   * Contains the dev.tfvars file with settings for the development environment.
+   * Example settings: smaller cpu and memory size.
+   * All development and feature work starts in feature branches branched off of *dev*
+   * Merging to *prod* automatically triggers a GitHub Actions workflow that deploy the changes to the AWS *dev* environment.
 
 - *prod* branch:  
-Contains the dev.tfvars file with settings for the production environment.
-Example settings: higher cpu and memory size.
-All Production and feature work starts in feature branches branched off of
-*prod*
+   * Contains the dev.tfvars file with settings for the production environment.
+   * Example settings: higher cpu and memory size.
+   * New prod features starts in feature branches branched off from *prod*
+   * A pull request to *prod* from its feature branch requires a code review before it can be merged.
+   * Merging to *prod* automatically triggers a GitHub Actions workflow that deploy the changes to the AWS *prod* environment.
+   
+    
+
 
 ---
 
