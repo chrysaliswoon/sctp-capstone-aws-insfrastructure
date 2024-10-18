@@ -1,7 +1,7 @@
 name: Deploy Environment
 on:
   pull_request:
-    branch : ["prod", "dev"]
+    branch : ["main"]
                          
 jobs:
   deploy:
