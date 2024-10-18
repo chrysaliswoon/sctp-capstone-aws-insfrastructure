@@ -1,7 +1,7 @@
 name: Deploy Environment
 on:
   pull_request:
-    branch : ["prod", "dev"]
+    branch : ["main"]
                          
 jobs:
   deploy:
@@ -30,6 +30,9 @@ jobs:
     - name: Terraform Init
       run: terraform init --upgrade
 
+    - name: Terraform Workspace Select
+      run: "terraform workspace select ${{ github.ref_name }}"
+
     - name: Terraform Validate
       id: validate
       run: terraform validate
@@ -47,16 +50,8 @@ jobs:
     - name: Run TFLint
       run: tflint -f compact
 
-    - name: Extract first element of branch name
-      id: first-element
-      run: |
-        run: |
-          branch_name="${{ github.ref_name }}"
-          first_element=$(echo "$branch_name" | cut -d '-' -f 1)
-          echo "::set-output name=first_element::$first_element"
-
     - name: Terrform Plan
-      run: "terraform plan -var-file=tfvars/${{ steps.first-element.outputs.first_element }}.tfvars"
+      run: "terraform plan -var-file=tfvars/${{ github.ref_name }}.tfvars"
 
     - name: Terraform Apply
-      run: "terraform apply -var-file=tfvars/${{ steps.first-element.outputs.first_element }}.tfvars --auto-approve"
+      run: "terraform apply -var-file=tfvars/${{ github.ref_name }}.tfvars --auto-approve"

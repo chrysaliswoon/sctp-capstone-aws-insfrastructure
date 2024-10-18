@@ -1,10 +1,10 @@
 # CLOUDSCALE: AUTOMATED REPORT GENERATION USING AWS CLOUD SERVICES
 
-![Architecture Diagram](./assets/diagram.jpeg)
+![Architecture Diagram](./ktph.drawio.png)
 
 ## Project Overview
 
-This capstone project is designed to demonstrate the use of AWS infrastructure for managing scalable cloud environments, a serverless application, and Apache Superset for data visualization. 
+This capstone project is designed to demonstrate the use of AWS infrastructure for managing scalable cloud environments, serverless applications and Apache Superset for data visualization. 
 
 The goal is to provide a solution that integrates these components to offer efficient, scalable, and user-friendly data management and visualization.
 
@@ -215,22 +215,6 @@ Branches
     * Merging to `main` automatically triggers a GitHub Actions workflow that requires manual approval to deploy the changes to the AWS Prod environment.
 <br>
 <br>
-
-*This section outlines the branching strategy for managing our Terraform code and tfvars files for deploying infrastructure to development and production environments on AWS.*
-
-- We will use a separate branch for each environment: *dev* and *prod*. This provides clear separation and reduces the risk of accidental deployments to the wrong environment.
-
-- *dev* branch:  
-Contains the dev.tfvars file with settings for the development environment.
-Example settings: smaller cpu and memory size.
-All development and feature work starts in feature branches branched off of
-*dev*
-
-- *prod* branch:  
-Contains the dev.tfvars file with settings for the production environment.
-Example settings: higher cpu and memory size.
-All Production and feature work starts in feature branches branched off of
-*prod*
 
 ---
 
