@@ -212,7 +212,7 @@ Branches
     * Represents the production-ready code.
     * To deploy to the Prod environment, changes must be merged into the `main` from `dev`.
     * A pull request to `main` requires a code review and approval before it can be merged.
-    * Merging to `main` automatically triggers a GitHub Actions workflow that requires manual approval to deploy the changes to the AWS Prod environment.
+    * Merging to `main` automatically triggers a GitHub Actions workflow to deploy the changes to the AWS Prod environment.
 <br>
 <br>
 
