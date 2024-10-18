@@ -1,10 +1,10 @@
 # CLOUDSCALE: AUTOMATED REPORT GENERATION USING AWS CLOUD SERVICES
 
-![Architecture Diagram](./assets/diagram.jpeg)
+![Architecture Diagram](./ktph.drawio.png)
 
 ## Project Overview
 
-This capstone project is designed to demonstrate the use of AWS infrastructure for managing scalable cloud environments, a serverless application, and Apache Superset for data visualization. 
+This capstone project is designed to demonstrate the use of AWS infrastructure for managing scalable cloud environments, serverless applications and Apache Superset for data visualization. 
 
 The goal is to provide a solution that integrates these components to offer efficient, scalable, and user-friendly data management and visualization.
 
